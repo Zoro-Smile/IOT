@@ -1,0 +1,57 @@
+#include <ESP8266WiFi.h>
+#include "ThingSpeak.h"
+
+const int LDR_pin = A0;
+const int LED_pin = 2; // GPIO2 = D4 on NodeMCU
+
+// Wi-Fi Credentials
+char ssid[] = "raspberry_pi";      // Replace with your Wi-Fi SSID
+char pass[] = "123456789";         // Replace with your Wi-Fi Password
+
+// ThingSpeak Setup
+WiFiClient client;
+unsigned long myChannelNumber = 1831217; // Replace with your ThingSpeak Channel ID
+const int FieldNumber = 1;
+const char * myWriteAPIKey = "P47FDNAYU6MRM9WH"; // Replace with your Write API Key
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(LED_pin, OUTPUT);
+
+  WiFi.mode(WIFI_STA);
+  ThingSpeak.begin(client);
+}
+
+void loop() {
+  // Reconnect Wi-Fi if disconnected
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.print("Connecting to SSID: ");
+    Serial.println(ssid);
+    while (WiFi.status() != WL_CONNECTED) {
+      WiFi.begin(ssid, pass);
+      delay(5000);
+      Serial.print(".");
+    }
+    Serial.println("\nConnected.");
+  }
+
+  // Read LDR and map to percentage
+  unsigned short ADC = analogRead(LDR_pin);
+  unsigned char LDR_percentage = map(ADC, 0, 1023, 0, 100);
+  
+  Serial.print("LDR Percentage = ");
+  Serial.print(LDR_percentage);
+  Serial.println(" %");
+
+  // Control LED based on brightness
+  if (LDR_percentage > 70) {
+    digitalWrite(LED_pin, HIGH); // It's bright - LED ON
+  } else {
+    digitalWrite(LED_pin, LOW);  // It's dark - LED OFF
+  }
+
+  // Upload to ThingSpeak
+  ThingSpeak.writeField(myChannelNumber, FieldNumber, LDR_percentage, myWriteAPIKey);
+
+  delay(15000); // ThingSpeak rate limit = 15s
+}
