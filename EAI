@@ -24,3 +24,5 @@ plt.title("Linear Regression")
 plt.xlabel("X")
 plt.ylabel("y")
 plt.show()
+
+print("vanakkam da mapla output varutha... ooo varum athu nala than itha pakura ") 
