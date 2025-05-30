@@ -1,0 +1,26 @@
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# Data
+X = [[1], [2], [3], [4], [5]]
+y = [2, 4, 5, 4, 5]
+
+# EDA - Scatter Plot
+plt.scatter(X, y)
+plt.title("X vs y")
+plt.xlabel("X")
+plt.ylabel("y")
+plt.show()
+
+# Linear Regression
+model = LinearRegression()
+model.fit(X, y)
+
+# Regression line
+y_pred = model.predict(X)
+plt.scatter(X, y)
+plt.plot(X, y_pred, color='red')
+plt.title("Linear Regression")
+plt.xlabel("X")
+plt.ylabel("y")
+plt.show()
