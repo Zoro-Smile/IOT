@@ -15,6 +15,7 @@ plt.show()
 # Linear Regression
 model = LinearRegression()
 model.fit(X, y)
+print("vanakkam da mapla output varutha... ooo varum athu nala than itha pakura ") 
 
 # Regression line
 y_pred = model.predict(X)
@@ -25,4 +26,4 @@ plt.xlabel("X")
 plt.ylabel("y")
 plt.show()
 
-print("vanakkam da mapla output varutha... ooo varum athu nala than itha pakura ") 
+
